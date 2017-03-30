@@ -1,0 +1,12 @@
+{% set plex = salt['grains.filter_by']({
+    'Debian': {
+        'base_url': 'https://downloads.plex.tv/plex-media-server',
+        'package_prefix': 'plexmediaserver_',
+        'package_suffix': '.deb',
+    },
+    'RedHat': { 
+        'base_url': 'https://downloads.plex.tv/plex-media-server',
+        'package_prefix': 'plexmediaserver_',
+        'package_suffix': '.rpm',
+    },
+}, grain='os_family', merge=salt['pillar.get']('plex:lookup'), default='Debian') %}
