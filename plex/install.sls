@@ -8,5 +8,5 @@
 plex_package:
   pkg.installed:
     - sources: 
-      - plex: {{ source }}
+      - {{plex.package_name}}: {{ source }}
 {% endif %}

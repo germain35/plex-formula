@@ -2,4 +2,7 @@
 
 include:
   - plex.install
-  - plex.service
+
+plex_service:
+  service.running:
+      - name: {{plex.package_name}}
