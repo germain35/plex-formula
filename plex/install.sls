@@ -9,4 +9,6 @@ plex_package:
   pkg.installed:
     - sources: 
       - {{plex.package_name}}: {{ source }}
+    - watch_in:
+      - service: plex
 {% endif %}

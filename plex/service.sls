@@ -3,6 +3,9 @@
 include:
   - plex.install
 
-plex_service:
+plex:
   service.running:
       - name: {{plex.package_name}}
+      - enable: True
+      - require:
+        - sls: plex.install
