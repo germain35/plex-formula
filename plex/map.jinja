@@ -1,14 +1,49 @@
-{% set plex = salt['grains.filter_by']({
+# -*- coding: utf-8 -*-
+# vim: ft=jinja:ts=2:sw=2
+
+{% import_yaml "plex/defaults.yaml" as default_settings %}
+
+{%- set os         = salt['grains.get']('os') %}
+{%- set osrelease  = salt['grains.get']('osrelease') %}
+{%- set oscodename = salt['grains.get']('oscodename') %}
+
+{## Merge in plex pillar ##}
+{% set plex_settings = salt['pillar.get'](
+  'plex',
+  default=default_settings.plex,
+  merge=True)
+%}
+
+{% set os_map = salt['grains.filter_by']({
     'Debian': {
         'base_url': 'https://downloads.plex.tv/plex-media-server',
         'package_name': 'plexmediaserver',
         'package_prefix': 'plexmediaserver_',
         'package_suffix': '.deb',
+        'service_name': 'plexmediaserver',
+        'repo': {
+          'humanname': 'plexmediaserver',
+          'name': 'deb https://downloads.plex.tv/repo/deb ./public main',
+          'file': '/etc/apt/sources.list.d/plex.list',
+          'key_url': 'https://downloads.plex.tv/plex-keys/PlexSign.key',
+        }
     },
     'RedHat': { 
         'base_url': 'https://downloads.plex.tv/plex-media-server',
         'package_name': 'plexmediaserver',
         'package_prefix': 'plexmediaserver_',
         'package_suffix': '.rpm',
+        'service_name': 'plexmediaserver',
+        'repo': {
+          'humanname': 'plexmediaserver',
+          'baseurl': 'https://downloads.plex.tv/repo/rpm/$basearch/',
+          'gpgkey': 'https://downloads.plex.tv/plex-keys/PlexSign.key',
+          'gpgcheck': '1',
+        }
+
     },
 }, grain='os_family', merge=salt['pillar.get']('plex:lookup'), default='Debian') %}
+
+{## Merge the flavor_map to the default settings ##}
+{% do salt['defaults.merge'](plex_settings,os_map) %}
+
