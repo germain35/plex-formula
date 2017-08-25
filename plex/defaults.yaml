@@ -2,3 +2,4 @@
 # vim: ft=yaml
 plex:
   manage_repo: True
+  version: latest
