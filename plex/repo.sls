@@ -1,14 +1,14 @@
-{% from "plex/map.jinja" import plex_settings with context %}
+{% from "plex/map.jinja" import plex with context %}
 
 {%- set os         = salt['grains.get']('os') %}
 {%- set osrelease  = salt['grains.get']('osrelease') %}
 {%- set oscodename = salt['grains.get']('oscodename') %}
 
-{%- if plex_settings.manage_repo %}
-  {%- if 'repo' in plex_settings and plex_settings.repo is mapping %}
+{%- if plex.manage_repo %}
+  {%- if 'repo' in plex and plex.repo is mapping %}
 plex_repo:
   pkgrepo.managed:
-    {%- for k, v in plex_settings.repo.iteritems() %}
+    {%- for k, v in plex.repo.iteritems() %}
     - {{k}}: {{v}}
     {%- endfor %}
   {%- endif %}

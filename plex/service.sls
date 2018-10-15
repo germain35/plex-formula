@@ -1,11 +1,11 @@
-{% from "plex/map.jinja" import plex_settings with context %}
+{% from "plex/map.jinja" import plex with context %}
 
 include:
   - plex.install
 
 plex:
   service.running:
-      - name: {{plex_settings.service_name}}
+      - name: {{plex.service_name}}
       - enable: True
       - require:
         - sls: plex.install
